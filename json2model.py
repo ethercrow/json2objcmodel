@@ -26,7 +26,8 @@ def traverse_node(node, name):
             result = result + traverse_node(v, child_class_name)
             current.add_field(k, child_class_name+'*')
         elif isinstance(v, list):
-            result = result + traverse_node(v[0], to_singular(k).title())
+            if len(v):
+                result = result + traverse_node(v[0], to_singular(k).title())
             current.add_field(k, "NSArray*")
         else:
             current.add_field(k, TYPE_TYPE_MAP[type(v)])
@@ -44,7 +45,7 @@ if __name__ == '__main__':
         print("Usage: {} Foo.json".format(sys.argv[0]))
 
     filename = sys.argv[1]
-    class_name = basename(filename).split('.')[0].title()
+    class_name = basename(filename).split('.')[0].title() + 'Model'
 
     with open(filename) as fi:
         root = json.load(fi)
@@ -62,4 +63,10 @@ if __name__ == '__main__':
         print(c.dump_header())
         print('-----------------------------------')
         print(c.dump_implementation())
+
+    with open(class_name+'.h', 'wt') as fo_h:
+        fo_h.write(c.dump_header())
+
+    with open(class_name+'.m', 'wt') as fo_m:
+        fo_m.write(c.dump_implementation())
 
