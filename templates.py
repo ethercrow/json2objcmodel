@@ -39,8 +39,9 @@ SETTER_BODY_TEMPLATE = '''- (void)setContent:(NSDictionary*)content
 }}
 '''
 
-FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [content objectForKey:"{name}"];'
-INT_FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [[content objectForKey:"{name}"] intValue];'
+FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [content objectForKey:@"{name}"];'
+INT_FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [[content objectForKey:@"{name}"] intValue];'
+DOUBLE_FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [[content objectForKey:@"{name}"] doubleValue];'
 
 DEALLOC_BODY_TEMPLATE = '''- (void)dealloc
 {{

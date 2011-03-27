@@ -4,7 +4,9 @@ TYPE_TYPE_MAP = {
        list:"NSMutableArray*",
        dict:"NSMutableDictionary*",
         str:"NSString*",
-        int:"int"}
+        int:"int",
+      float:"double"
+}
 
 class ObjCClass():
 
@@ -41,7 +43,7 @@ class ObjCClass():
 
         def declare_property(f):
             mem_policy = 'retain'
-            if f.objc_type == 'int':
+            if f.objc_type in ['int', 'double']:
                 mem_policy = 'assign'
 
             return PROPERTY_DECL_TEMPLATE.format(objc_type=f.objc_type,
@@ -74,6 +76,8 @@ class ObjCClass():
             template = FIELD_PARSE_LINE_TEMPLATE
             if f.objc_type == "int":
                 template = INT_FIELD_PARSE_LINE_TEMPLATE
+            elif f.objc_type == "double":
+                template = DOUBLE_FIELD_PARSE_LINE_TEMPLATE
             return template.format(name=f.name)
 
         parse_lines = "\n".join(map(parse_field, self.fields))
