@@ -39,9 +39,21 @@ SETTER_BODY_TEMPLATE = '''- (void)setContent:(NSDictionary*)content
 }}
 '''
 
-FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [content objectForKey:@"{name}"];'
-INT_FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [[content objectForKey:@"{name}"] intValue];'
-DOUBLE_FIELD_PARSE_LINE_TEMPLATE = '    self.{name} = [[content objectForKey:@"{name}"] doubleValue];'
+FIELD_PARSE_LINE_TEMPLATE = '''
+    self.{name} = [content objectForKey:@"{name}"];
+    self.{name} = [[NSNull null] isEqual:self.{name}]?nil:self.{name};'''
+INT_FIELD_PARSE_LINE_TEMPLATE = '''
+    id boxed_{name} = [content objectForKey:@"{name}"];
+    if (boxed_{name} && ![[NSNull null] isEqual:boxed_{name}])
+        self.{name} = [boxed_{name} intValue];
+    else
+        self.{name} = 0;'''
+DOUBLE_FIELD_PARSE_LINE_TEMPLATE = '''
+    id boxed_{name} = [content objectForKey:@"{name}"];
+    if (boxed_{name} && ![[NSNull null] isEqual:boxed_{name}])
+        self.{name} = [boxed_{name} doubleValue];
+    else
+        self.{name} = 0.f;'''
 
 DEALLOC_BODY_TEMPLATE = '''- (void)dealloc
 {{
