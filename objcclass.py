@@ -5,6 +5,7 @@ TYPE_TYPE_MAP = {
        dict:"NSMutableDictionary*",
         str:"NSString*",
         int:"int",
+       bool:"bool",
       float:"double"
 }
 
@@ -43,7 +44,7 @@ class ObjCClass():
 
         def declare_property(f):
             mem_policy = 'retain'
-            if f.objc_type in ['int', 'double']:
+            if f.objc_type in ['int', 'double', 'bool']:
                 mem_policy = 'assign'
 
             return PROPERTY_DECL_TEMPLATE.format(objc_type=f.objc_type,
@@ -78,6 +79,8 @@ class ObjCClass():
                 template = INT_FIELD_PARSE_LINE_TEMPLATE
             elif f.objc_type == "double":
                 template = DOUBLE_FIELD_PARSE_LINE_TEMPLATE
+            elif f.objc_type == "bool":
+                template = BOOL_FIELD_PARSE_LINE_TEMPLATE
             return template.format(name=f.name)
 
         parse_lines = "\n".join(map(parse_field, self.fields))

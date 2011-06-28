@@ -26,7 +26,7 @@ def traverse_node(node, name):
             result = result + traverse_node(v, child_class_name)
             current.add_field(k, child_class_name+'*')
         elif isinstance(v, list):
-            if len(v):
+            if len(v) and isinstance(v[0], dict):
                 result = result + traverse_node(v[0], to_singular(k).title())
             current.add_field(k, "NSArray*")
         else:

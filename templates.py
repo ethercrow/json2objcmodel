@@ -54,6 +54,12 @@ DOUBLE_FIELD_PARSE_LINE_TEMPLATE = '''
         self.{name} = [boxed_{name} doubleValue];
     else
         self.{name} = 0.f;'''
+BOOL_FIELD_PARSE_LINE_TEMPLATE = '''
+    id boxed_{name} = [content objectForKey:@"{name}"];
+    if (boxed_{name} && ![[NSNull null] isEqual:boxed_{name}])
+        self.{name} = [boxed_{name} boolValue];
+    else
+        self.{name} = NO;'''
 
 DEALLOC_BODY_TEMPLATE = '''- (void)dealloc
 {{
